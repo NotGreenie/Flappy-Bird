@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// GameManager is a base class that makes everything, from sounds, UI, and even telling other scripts if the game is active, work.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
@@ -26,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     private int score;
     [SerializeField] private float spawnRate;
-    public float soundVolume = 1.0f; // TODO: replace value with slider value on title screen
+    public float soundVolume = 1.0f;
 
     public bool isGameActive;
     public bool startingJump;
@@ -44,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnPipes()
     {
+        // While game is active, keep spawning pipes, then after pipe has been spawned wait for spawnRate seconds
         while (isGameActive)
         {
             yield return new WaitForSeconds(spawnRate);
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator WaitForKeyDown()
     {
+        // Wait until space is down or left mouse button has been clicked, then start the game
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
 
         isGameActive = true;
@@ -65,21 +70,22 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        // Sets up warning text, telling player to click or press space bar
         titleScreen.gameObject.SetActive(false);
         warningText.gameObject.SetActive(true);
 
+        // Starts a coroutine waiting for the player to click or press space bar before starting the game
         StartCoroutine(WaitForKeyDown());
     }
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    public void RestartGame() => SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reloads the scene
 
     public void GameOver()
     {
+        // Stops the game by setting isGameActive to false, then setting the game over UI to be active
         isGameActive = false;
         StopCoroutine(SpawnPipes());
+
         restartButton.gameObject.SetActive(true);
         gameOverText.SetActive(true);
         scoreText.gameObject.SetActive(false);
@@ -89,6 +95,7 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseScore()
     {
+        // Increments the score, then plays a short sound
         score++;
         scoreText.text = "Score: " + score;
         birdAudio.PlayOneShot(scoreSound, soundVolume);

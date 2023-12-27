@@ -22,11 +22,13 @@ public class PipeBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If game is active, keep moving pipe to the left
         if (gameManager.isGameActive)
         {
             transform.Translate(Vector2.left * Time.deltaTime * speed);
         }
 
+        // If offscreen, destroy pipe
         if (transform.position.x < -spawnX)
         {
             Destroy(gameObject);

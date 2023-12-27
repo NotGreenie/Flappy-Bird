@@ -26,10 +26,12 @@ public class RepeatBackground : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If game is still active, keep moving
         if (gameManager.isGameActive)
         {
             transform.Translate(Vector2.left * Time.deltaTime * scrollSpeed);
 
+            // Sends background back to starting position, creating a repeating background
             if (transform.position.x < startPos.x - repeatWidth)
             {
                 transform.position = startPos;

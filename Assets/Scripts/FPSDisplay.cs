@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// FPSDisplay is a base class that shows what the FPS of the game is.
+/// </summary>
 public class FPSDisplay : MonoBehaviour
 {
     public TextMeshProUGUI FPSText;
